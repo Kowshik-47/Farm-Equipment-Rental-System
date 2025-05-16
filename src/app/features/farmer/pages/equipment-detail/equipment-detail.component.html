@@ -1,0 +1,132 @@
+<div class="equipment-detail-page fade-in">
+    <a routerLink="/farmer/equipment" class="back-link">
+      ← Back to Equipment
+    </a>
+    
+    <div *ngIf="loading" class="loading-state card">
+      <p>Loading equipment details...</p>
+    </div>
+    
+    <div *ngIf="!loading && !equipment" class="error-state card">
+      <h3>Equipment Not Found</h3>
+      <p>The equipment you're looking for could not be found.</p>
+      <a routerLink="/farmer/equipment" class="btn btn-primary">Browse Equipment</a>
+    </div>
+    
+    <div *ngIf="!loading && equipment" class="equipment-detail-content">
+      <div class="equipment-main-content">
+        <div class="equipment-images card">
+          <div class="primary-image">
+            <img 
+              [src]="'http://localhost:3000'+equipment.images[0]" 
+              [alt]="equipment.name"
+            >
+            <div *ngIf="equipment.isInMaintenance" class="maintenance-badge">
+              Under Maintenance
+            </div>
+          </div>
+          
+          <div *ngIf="equipment.images && equipment.images.length > 1" class="thumbnail-images">
+            <div *ngFor="let image of equipment.images; let i = index" class="thumbnail">
+              <img [src]="image" [alt]="equipment.name + ' image ' + i">
+            </div>
+          </div>
+        </div>
+        
+        <div class="equipment-info card">
+          <h2>{{ equipment.name }}</h2>
+          <p class="equipment-category">{{ equipment.category }}</p>
+          
+          <div class="equipment-rate">
+            <span class="rate-amount">₹{{ equipment.dailyRate }}</span>
+            <span class="rate-period">per day</span>
+          </div>
+          
+          <div class="equipment-description">
+            <h3>Description</h3>
+            <p>{{ equipment.description }}</p>
+          </div>
+          
+          <div *ngIf="equipment.features && equipment.features.length > 0" class="equipment-features">
+            <h3>Features</h3>
+            <ul>
+              <li *ngFor="let feature of equipment.features">{{ feature }}</li>
+            </ul>
+          </div>
+          
+          <div *ngIf="equipment.specifications" class="equipment-specifications">
+            <h3>Specifications</h3>
+            <div class="specifications-grid">
+              <div *ngFor="let spec of getSpecifications()" class="specification-item">
+                <div class="spec-label">{{ spec.key }}</div>
+                <div class="spec-value">{{ spec.value }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="booking-card card">
+        <h3>Reserve This Equipment</h3>
+        
+        <div *ngIf="equipment.isInMaintenance" class="maintenance-notice">
+          <p>This equipment is currently under maintenance and not available for booking.</p>
+        </div>
+        
+        <div *ngIf="!equipment.isInMaintenance">
+          <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="startDate" class="form-label">Start Date</label>
+              <input 
+                type="date" 
+                id="startDate" 
+                formControlName="startDate" 
+                class="form-control"
+                [min]="today"
+              >
+              <div *ngIf="bookingForm.get('startDate')?.invalid && bookingForm.get('startDate')?.touched" class="text-error">
+                Start date is required
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="endDate" class="form-label">End Date</label>
+              <input 
+                type="date" 
+                id="endDate" 
+                formControlName="endDate" 
+                class="form-control"
+                [min]="minEndDate"
+              >
+              <div *ngIf="bookingForm.get('endDate')?.invalid && bookingForm.get('endDate')?.touched" class="text-error">
+                End date is required and must be after start date
+              </div>
+            </div>
+            
+            <div *ngIf="rentalDays > 0" class="booking-summary">
+              <div class="summary-item">
+                <span>Daily Rate:</span>
+                <span>₹{{ equipment.dailyRate | number:'1.2-2' }}</span>
+              </div>
+              <div class="summary-item">
+                <span>Rental Days:</span>
+                <span>{{ rentalDays }} days</span>
+              </div>
+              <div class="summary-item total">
+                <span>Total:</span>
+                <span>₹{{ totalAmount }}</span>
+              </div>
+            </div>
+            
+            <button 
+              type="submit" 
+              class="btn btn-primary w-full"
+              [disabled]="bookingForm.invalid || isSubmitting"
+            >
+              {{ isSubmitting ? 'Processing...' : 'Book Now' }}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

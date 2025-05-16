@@ -1,0 +1,27 @@
+<div class="dialog-container">
+    <div class="dialog-header">
+      <h2>Booking Details</h2>
+    </div>
+  
+    <div class="dialog-content">
+      <p><strong>Booking ID:</strong> {{ data.booking._id }}</p>
+      <p><strong>Equipment:</strong> {{ data.booking.equipment.name }}</p>
+      <p><strong>Start Date:</strong> {{ data.booking.startDate ? (data.booking.startDate | date:'shortDate') : 'N/A' }}</p>
+      <p><strong>End Date:</strong> {{ data.booking.endDate ? (data.booking.endDate | date:'shortDate') : 'N/A' }}</p>
+      <p><strong>Total Amount:</strong> ₹{{ (data.booking.totalAmount|| 0) | number:'1.2-2' }}</p>
+      <p><strong>Status:</strong> {{ data.booking.status || 'N/A' }}</p>
+      <p><strong>Payment Status:</strong> 
+        <span [ngClass]="{
+          'paid': data.booking.paymentStatus === 'paid',
+          'pending-payment': data.booking.paymentStatus === 'pending',
+          'refunded': data.booking.paymentStatus === 'refunded'
+        }">
+          {{ data.booking.paymentStatus || 'N/A' }}
+        </span>
+      </p>
+    </div>
+  
+    <div class="dialog-actions">
+      <button mat-button (click)="closeDialog()">Close</button>
+    </div>
+  </div>

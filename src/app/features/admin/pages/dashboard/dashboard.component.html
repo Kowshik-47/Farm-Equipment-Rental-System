@@ -1,0 +1,78 @@
+<div class="dashboard fade-in">
+    <h2>Admin Dashboard</h2>
+    
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+    
+    <div class="status-cards">
+      <div class="card status-card">
+        <div class="status-icon confirmed">📊</div>
+        <div class="status-content">
+          <h3>{{ statistics.totalBookings }}</h3>
+          <p>Total Bookings</p>
+        </div>
+      </div>
+      
+      <div class="card status-card">
+        <div class="status-icon pending">💰</div>
+        <div class="status-content">
+          <h3>₹{{ statistics.revenue | number:'1.2-2'}}</h3>
+          <p>Total Revenue</p>
+        </div>
+      </div>
+      
+      <div class="card status-card">
+        <div class="status-icon active">🚜</div>
+        <div class="status-content">
+          <h3>{{ activeBookings.length }}</h3>
+          <p>Active Rentals</p>
+        </div>
+      </div>
+
+      <div class="card status-card">
+        <div class="status-icon active">🚜</div>
+        <div class="status-content">
+          <h3>{{ popularEquipment }}</h3>
+          <p>Equipment In Demand</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card status-card">
+      <div class="status-icon active">📈</div>
+      <div class="status-content">
+        <h4>Statistics</h4>
+        <div *ngFor="let stat of this.statistics.bookingsByStatus">
+          <div style="display: flex; justify-content: space-between;">
+            <p style="width: 10vw;">{{ stat._id }}</p><p>{{stat.count}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="recent-section">
+      <div class="section-header">
+        <h3>Recent Bookings</h3>
+      </div>
+      
+      <div class="booking had been made-list status-cards">
+        <div class="booking-card card" *ngFor="let booking of activeBookings">
+          <div class="booking-header">
+            <h4>{{ booking.equipment.name }}</h4>
+            <span class="badge" [ngClass]="'badge-' + booking.status">
+              {{ booking.status }}
+            </span>
+          </div>
+          
+          <div class="booking-info">
+            <p>Farmer: {{ booking.farmer.name }}</p>
+            <p>Start: {{ booking.startDate | date }}</p>
+            <p>End: {{ booking.endDate | date }}</p>
+            <p>Amount: ₹{{ booking.totalAmount | number:'1.2-2'}}</p>
+          </div>
+        </div>
+        <div class="empty-state card" *ngIf="activeBookings.length === 0">
+          <p>No active bookings</p>
+        </div>
+      </div>
+    </div>
+  </div>

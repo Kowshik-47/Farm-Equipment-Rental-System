@@ -1,0 +1,110 @@
+/* Previous styles remain the same, add these new styles */
+
+.booking-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+  }
+  
+  .booking-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .booking-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  
+  .card-header {
+    padding: 16px;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .card-header h3 {
+    margin: 0;
+    color: #333;
+  }
+  
+  .card-content {
+    padding: 16px;
+    flex-grow: 1;
+  }
+  
+  .booking-info p {
+    margin: 8px 0;
+  }
+  
+  .paid {
+    color: #2e7d32;
+    font-weight: 500;
+  }
+  
+  .pending-payment {
+    color: #d32f2f;
+    font-weight: 500;
+  }
+  
+  .booking-notes {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #eee;
+  }
+  
+  .card-actions {
+    padding: 8px 16px;
+    width: 80%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    border-top: 1px solid #eee;
+  }
+  
+  .card-actions button{
+    padding: 8px 15px;
+    font-size: 1.1em;
+    border-radius: 30px;
+    border: 0;
+  }
+  .pay{
+    background-color: rgb(0, 218, 116);
+    color:black;
+  }
+
+  .cancel{
+    background-color: rgb(255, 51, 0);
+    color:black;
+  }
+
+  .pay:hover, .cancel:hover{
+    color:white;
+  }
+
+  .details:hover{
+    background-color: dimgray;
+    color: white;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .booking-cards {
+      grid-template-columns: 1fr;
+    }
+    
+    .card-actions {
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .card-actions button {
+      width: 100%;
+    }
+  }

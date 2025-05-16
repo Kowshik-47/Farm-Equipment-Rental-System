@@ -1,0 +1,75 @@
+<div class="equipment-list-page fade-in">
+    <h2>Available Equipment</h2>
+    
+    <div class="filters card">
+      <form [formGroup]="filterForm" class="filter-form">
+        <div class="filter-section">
+          <label for="search" class="form-label">Search</label>
+          <input 
+            type="text" 
+            id="search" 
+            formControlName="search" 
+            class="form-control"
+            placeholder="Search by name or description"
+          >
+        </div>
+        
+        <div class="filter-section">
+          <label for="category" class="form-label">Category</label>
+          <select id="category" formControlName="category" class="form-control">
+            <option value="">All Categories</option>
+            <option *ngFor="let category of categories" [value]="category">
+              {{ category }}
+            </option>
+          </select>
+        </div>
+        
+        <div class="filter-section">
+          <label for="sortBy" class="form-label">Sort By</label>
+          <select id="sortBy" formControlName="sortBy" class="form-control">
+            <option value="nameAsc">Name (A-Z)</option>
+            <option value="nameDesc">Name (Z-A)</option>
+            <option value="priceAsc">Price (Low-High)</option>
+            <option value="priceDesc">Price (High-Low)</option>
+          </select>
+        </div>
+        
+        <button type="button" (click)="resetFilters()" class="btn btn-outline">
+          Reset Filters
+        </button>
+      </form>
+    </div>
+    
+    <div *ngIf="loading" class="loading-state">
+      <p>Loading equipment...</p>
+    </div>
+    
+    <div *ngIf="!loading && filteredEquipment.length === 0" class="empty-state card">
+      <p>No equipment found matching your filters.</p>
+      <button (click)="resetFilters()" class="btn btn-primary">Clear Filters</button>
+    </div>
+    
+    <div *ngIf="!loading && filteredEquipment.length > 0" class="equipment-grid">
+      <div *ngFor="let equipment of filteredEquipment" class="equipment-card card slide-in">
+        <div class="equipment-image">
+          <img 
+            [src]="'http://localhost:3000'+equipment.images[0]"
+          >
+          <div *ngIf="equipment.isInMaintenance" class="maintenance-badge">
+            Under Maintenance
+          </div>
+        </div>
+        
+        <div class="equipment-info">
+          <h3>{{ equipment.name }}</h3>
+          <p class="equipment-category">{{ equipment.category }}</p>
+          <p class="equipment-rate">₹{{ equipment.dailyRate | number:'1.2-2' }} / day</p>
+          <p class="equipment-description">{{ equipment.description | slice:0:100 }}{{ equipment.description.length > 100 ? '...' : '' }}</p>
+        </div>
+        
+        <div class="equipment-footer">
+          <a [routerLink]="['/farmer/equipment', equipment._id]" class="btn btn-primary">View Details</a>
+        </div>
+      </div>
+    </div>
+  </div>

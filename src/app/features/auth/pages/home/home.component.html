@@ -1,0 +1,151 @@
+<div class="whole-container">
+  <br>
+  <div class="logo">
+    <svg>
+      <text x="5%" y="80%"> AgroEquip </text>
+    </svg>
+  </div>
+  <div class="login">
+    <button class="log-btn" (click)="login()">Login</button>
+    <button class="sign-btn" (click)="signUp()">SignUp</button>
+  </div><br>
+  <div class="nav-bar">
+    <div class="btns">
+      <button *ngFor="let tab of tabs" 
+              [class.tab-btn-active]="activePane === tab" 
+              class="tab-btn" 
+              (click)="changePane(tab)">
+        {{ tab }}
+      </button>
+    </div>
+  </div>
+  <div class="container Home" [class.active-pane]="activePane === 'Home'">
+    <hr>
+    <marquee style="color: red; font: 1.3em sans-serif;">Get 20% off on your first rental booking Hurry Up!</marquee>
+    <hr>
+    <div class="img-container">
+      <button id="prev" (click)="prevSlide()"><</button>
+      <img [src]="'http://localhost:3000/public'+slides[count]" alt="image" class="image-content" id="image-content" draggable="false" (error)="onImageError($event)">
+      <h3 id="quotes">{{ quotes[count] }}</h3>
+      <button id="next" (click)="nextSlide()">></button>
+    </div>
+    <br><br>
+    <div class="content-horiz">
+      <div class="context">
+        <img src="http://localhost:3000/public/assets/Images/wide.jfif" (error)="onImageError($event)">
+        <div>
+          <strong>Wide Range of Equipments</strong><br>
+          Explore our extensive inventory of high-quality farm equipment, including tractors, 
+          plows, seeders, harvesters, and more. Whether you need machinery for planting, cultivating, 
+          or harvesting, we have the right tools to meet your agricultural needs.
+        </div>
+      </div>
+      <div class="context">
+        <div>
+          <strong>Transparent Pricing</strong><br>
+          We believe in clear and upfront pricing. Our rental rates are competitive and include all 
+          necessary details, so you know exactly what to expect. No hidden fees just straightforward 
+          pricing for your peace of mind.
+        </div>
+        <img src="http://localhost:3000/public/assets/Images/price.png" (error)="onImageError($event)">
+      </div>
+      <div class="context">
+        <img src="http://localhost:3000/public/assets/Images/flexible.png" (error)="onImageError($event)">
+        <div>
+          <strong>Flexible Rental Options</strong><br>
+          Choose from a variety of rental plans tailored to your requirements. Whether you need equipment 
+          for a few hours, days, or an entire season, our flexible rental options ensure you get the machinery 
+          you need when you need it.
+        </div>    
+      </div>
+    </div>
+    <br>
+    <div class="count-container">
+      <p>
+        <img src="http://localhost:3000/public/assets/icons/Farmer.png" alt="Loading" (error)="onImageError($event)"><br>
+        <span><h6>57640</h6><h6>Farmers</h6></span>
+      </p>
+      <p>
+        <img src="http://localhost:3000/public/assets/icons/Community.png" alt="Loading" (error)="onImageError($event)"><br>
+        <span><h6>127640</h6><h6>Community <br> Members</h6></span>
+      </p>
+      <p>
+        <img src="http://localhost:3000/public/assets/icons/Tractor.png" alt="Loading" (error)="onImageError($event)"><br>
+        <span><h6>19760</h6><h6>Equipments</h6></span>
+      </p>
+    </div>
+    <br>
+    <h2 style="font: 2em sans-serif;">Testimonials</h2>
+    <div class="content-container">
+      <div class="context" *ngFor="let testimonial of testimonials">
+        <p>
+          <strong>{{ testimonial.name }}</strong><br>
+          {{ testimonial.text }}
+        </p>
+      </div>
+    </div>
+    <br><br>
+    <div class="Partners">
+      <h2>Partners & Sponsors</h2>
+    </div>
+    <br>
+  </div>
+  <div class="container Machineries" [class.active-pane]="activePane === 'Machineries'">
+    <h2>Machineries Catalog</h2>
+    <div class="catalog">
+      <p>Description and pricing of each equipment that are available for Rentals are listed</p>
+      <p>Detailed pricing is shown in Pricings Tab</p><br>
+    </div>
+    <div class="category">
+      <div class="equip-type">
+        <div class="images" *ngFor="let image of images" [attr.tabIndex]="image.index" [attr.title]="image.name">
+          <img [src]="'http://localhost:3000/public/'+image.link" [attr.title]="image.name" (error)="onImageError($event)">
+          <div>
+            <strong>{{ image.name }}</strong>
+            <p>{{ image.desc }}</p>
+            <p style="font-weight: bold;">₹{{ image.price }}/day</p>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+    <br>
+  </div>
+  <div class="container About" [class.active-pane]="activePane === 'About'">
+    <br><br>
+    <div class="about">
+      <iframe *ngIf="isBrowser" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3934.8092913426376!2d77.85086187483937!3d9.525292190557211!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b06d3287794055d%3A0x9c7b889bf154fb86!2sMepco%20Schlenk%20Engineering%20College!5e0!3m2!1sen!2sin!4v1742055850888!5m2!1sen!2sin" 
+              width="500" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <div class="address">
+        <h3>Contact Us</h3>
+        <p>Phone No. : +91 95238275312 <br> 789 Park Avenue <br> Mumbai <br> India <br>342113</p>
+      </div>  
+    </div>
+    <br>
+  </div>
+  <div class="container Pricing" [class.active-pane]="activePane === 'Pricing'">
+    <h2>Machineries Pricings</h2>
+    <div class="catalog">
+      <p>Detailed pricing for each equipment according to the periods of rental</p><br>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Equipment Type</th>
+          <th>Daily Rate</th>
+          <th>Weekly Rate</th>
+          <th>Monthly Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let image of images">
+          <td>{{ image.name }}</td>
+          <td>₹{{ image.price  }}</td>
+          <td>₹{{ image.price * 6  }}</td>
+          <td>₹{{ image.price * 25  }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+  </div>
+</div>

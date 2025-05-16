@@ -1,0 +1,131 @@
+<div class="dashboard fade-in">
+    <h2>Farmer Dashboard</h2>
+    
+    <div class="status-cards">
+      <div class="card status-card">
+        <div class="status-icon confirmed">📅</div>
+        <div class="status-content">
+          <h3>{{ activeBookings.length }}</h3>
+          <p>Active Rentals</p>
+        </div>
+      </div>
+      
+      <div class="card status-card">
+        <div class="status-icon pending">⏳</div>
+        <div class="status-content">
+          <h3>{{ pendingBookings.length }}</h3>
+          <p>Pending Bookings</p>
+        </div>
+      </div>
+      
+      <div class="card status-card">
+        <div class="status-icon completed">✅</div>
+        <div class="status-content">
+          <h3>{{ completedBookings.length }}</h3>
+          <p>Completed Rentals</p>
+        </div>
+      </div>
+      
+      <div class="card status-card">
+        <div class="status-icon action">🚜</div>
+        <div class="status-content">
+          <a href="/farmer/equipment" class="btn btn-primary">Rent Equipment</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="recent-section">
+      <div class="section-header">
+        <h3>Current Rentals</h3>
+        <a href="/farmer/bookings" class="view-all">View All</a>
+      </div>
+      
+      <div *ngIf="activeBookings.length === 0" class="empty-state card">
+        <p>You don't have any active rentals at the moment.</p>
+        <a href="/farmer/equipment" class="btn btn-outline">Browse Equipment</a>
+      </div>
+      
+      <div *ngIf="activeBookings.length > 0" class="booking-list">
+        <div *ngFor="let booking of activeBookings" class="booking-card card">
+          <div class="booking-header">
+            <h4>{{ booking.equipment.name }}</h4>
+            <span class="badge" [ngClass]="'badge-' + booking.status">{{ booking.status }}</span>
+          </div>
+          
+          <div class="booking-dates">
+            <div class="date-item">
+              <div class="date-label">Start Date</div>
+              <div class="date-value">{{ booking.startDate | date:'mediumDate' }}</div>
+            </div>
+            
+            <div class="date-item">
+              <div class="date-label">End Date</div>
+              <div class="date-value">{{ booking.endDate | date:'mediumDate' }}</div>
+            </div>
+            
+            <div class="date-item">
+              <div class="date-label">Total</div>
+              <div class="date-value">{{ booking.totalAmount }}</div>
+            </div>
+          </div>
+          
+          <div class="booking-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="recent-section">
+      <div class="section-header">
+        <h3>Recent Activity</h3>
+      </div>
+      
+      <div *ngIf="recentBookings.length === 0" class="empty-state card">
+        <p>No recent booking activity to display.</p>
+      </div>
+      
+      <div *ngIf="recentBookings.length > 0" class="activity-timeline">
+        <div *ngFor="let booking of recentBookings" class="timeline-item">
+          <div class="timeline-icon" [ngClass]="booking.status">
+            <span *ngIf="booking.status === 'confirmed'">✓</span>
+            <span *ngIf="booking.status === 'pending'">⏱</span>
+            <span *ngIf="booking.status === 'In Progress'">₹</span>
+            <span *ngIf="booking.status === 'cancelled'">✕</span>
+            <span *ngIf="booking.status === 'completed'">✓</span>
+            <span *ngIf="booking.status === 'active'">⏱</span>
+          </div>
+          
+          <div class="timeline-content card">
+            <div class="timeline-header">
+              <h4>{{ booking.equipment.name }}</h4>
+              <span class="timeline-date">{{ booking.createdAt | date:'short' }}</span>
+            </div>
+            
+            <p>
+              <ng-container [ngSwitch]="booking.status">
+                <ng-container *ngSwitchCase="'confirmed'">
+                  Your booking has been confirmed and payment processed.
+                </ng-container>
+                <ng-container *ngSwitchCase="'pending'">
+                  Your booking is awaiting confirmation.
+                </ng-container>
+                <ng-container *ngSwitchCase="'cancelled'">
+                  Your booking was cancelled.
+                </ng-container>
+                <ng-container *ngSwitchCase="'In Progress'">
+                  Your booking was in progress for payment.
+                </ng-container>
+                <ng-container *ngSwitchCase="'completed'">
+                  Your rental has been completed.
+                </ng-container>
+                <ng-container *ngSwitchCase="'active'">
+                  Your rental is active now.
+                </ng-container>
+              </ng-container>
+            </p>
+            <a *ngIf="booking?._id" (click)="openBookingDetails(booking)" class="btn btn-outline">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

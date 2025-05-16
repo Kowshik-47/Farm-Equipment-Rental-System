@@ -1,0 +1,64 @@
+<h2 mat-dialog-title>Complete Payment</h2>
+
+<mat-dialog-content>
+  <div class="payment-summary">
+    <h3>Booking Summary</h3>
+    <p><strong>Equipment:</strong> {{ data.booking.equipment?.name }}</p>
+    <p><strong>Amount Due:</strong> ₹{{ data.booking.totalAmount | number:'1.2-2' }}</p>
+  </div>
+
+  <div class="payment-form">
+    <h3>Payment Information</h3>
+    
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Cardholder Name</mat-label>
+      <input matInput 
+             [(ngModel)]="cardDetails.name"
+             placeholder="John Doe">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Card Number</mat-label>
+      <input matInput 
+             [(ngModel)]="cardDetails.number"
+             (input)="formatCardNumber($event)"
+             placeholder="4242 4242 4242 4242"
+             maxlength="19"> <!-- 16 digits + 3 spaces -->
+    </mat-form-field>
+    
+    <div class="row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Expiry (MM/YY)</mat-label>
+        <input matInput 
+               [(ngModel)]="cardDetails.expiry"
+               (input)="formatExpiry($event)"
+               placeholder="12/25"
+               maxlength="5">
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>CVV</mat-label>
+        <input matInput 
+               [(ngModel)]="cardDetails.cvv"
+               placeholder="123"
+               type="password"
+               maxlength="4">
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="paymentError" class="payment-error">
+      <mat-icon>error</mat-icon> {{ paymentError }}
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-raised-button 
+          color="primary" 
+          (click)="processPayment()"
+          [disabled]="processing">
+    <span *ngIf="!processing">Pay ₹{{ data.booking.totalAmount | number:'1.2-2' }}</span>
+    <span *ngIf="processing">Processing...</span>
+  </button>
+</mat-dialog-actions>
