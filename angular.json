@@ -26,7 +26,7 @@
               "src/global_styles.css"
             ],
             "server": "src/main.server.ts",
-            "outputMode": "server",
+            "outputMode": "main.server",
             "ssr": {
               "entry": "src/main.ts"
             }
