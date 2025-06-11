@@ -22,7 +22,7 @@ app.use('/uploads', express.static('uploads'));
 app.use('/public', express.static('public'));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/farm-equipment-rental')
+mongoose.connect('mongodb+srv://kowshik-47:Ksefor-47@cluster0.1dh9lqe.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
