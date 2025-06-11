@@ -25,7 +25,6 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/global_styles.css"
             ],
-            "server": "src/main.server.ts",
             "outputMode": "server",
             "ssr": {
               "entry": "src/main.ts"
