@@ -14,11 +14,11 @@ export const FARMER_ROUTES: Routes = [
         path: 'equipment',
         loadComponent: () => import('./pages/equipment-list/equipment-list.component').then(m => m.EquipmentListComponent)
       },
-      {
+     /* {
         path: 'equipment/:id',
         data: { renderMode: 'ssr' },
         loadComponent: () => import('./pages/equipment-detail/equipment-detail.component').then(m => m.EquipmentDetailComponent)
-      },
+      },*/
       {
         path: 'bookings',
         loadComponent: () => import('./pages/booking-list/booking-list.component').then(m => m.BookingListComponent)
