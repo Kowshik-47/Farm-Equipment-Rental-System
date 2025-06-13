@@ -13,20 +13,20 @@ import { AuthService } from '../../../../core/services/auth.service';
       <div class="auth-card card">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3CFxBl8k7Y0VvBSrXGOjqeEGJ52p6kwUneg&s" alt="AgroEquip Logo" class="logo" />
         <br>
-        <h2 class="text-center">AgroEquip</h2>
-        <h3 class="text-center">Login to Your Account</h3>
-        
+        <h4 class="text-center">AgroEquip</h4>
+        <h6 class="text-center">Login to Your Account</h6>
+
         <div *ngIf="errorMessage" class="alert alert-danger">
           {{ errorMessage }}
         </div>
-        
+
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              formControlName="email" 
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
               class="form-control"
               placeholder="Enter your email"
             >
@@ -34,13 +34,13 @@ import { AuthService } from '../../../../core/services/auth.service';
               Please enter a valid email address
             </div>
           </div>
-          
+
           <div class="form-group">
             <label for="password" class="form-label">Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              formControlName="password" 
+            <input
+              type="password"
+              id="password"
+              formControlName="password"
               class="form-control"
               placeholder="Enter your password"
             >
@@ -48,9 +48,9 @@ import { AuthService } from '../../../../core/services/auth.service';
               Password is required
             </div>
           </div>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             class="btn btn-primary w-full"
             [disabled]="loginForm.invalid || isLoading"
           >
@@ -67,17 +67,20 @@ import { AuthService } from '../../../../core/services/auth.service';
   styles: [`
     .auth-container {
       display: flex;
+      min-height: 75vh;
       align-items: center;
       justify-content: center;
-      min-height: 85vh;
       padding: var(--space-4);
       background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
     }
-    
+
+    form {
+      margin-top: 2px;
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+    }
     .auth-card {
-      width: 100%;
-      max-width: 450px;
-      padding: var(--space-5);
       background-color: white;
       border-radius: 8px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -88,37 +91,34 @@ import { AuthService } from '../../../../core/services/auth.service';
     }
 
     .auth-card img{
-      height: 100px;
-      width: 100px;
+      height: 6em;
+      width: 6em;
       border-radius: 50%;
     }
-    
-    h2 {
-      color: var(--primary);
-      margin-bottom: var(--space-2);
+
+    .auth-card p{
+      font-size: .8em;
     }
-    
-    h3 {
-      margin-bottom: var(--space-4);
+    h4 {
+      color: var(--primary);
+    }
+
+    h6 {
       color: var(--neutral-700);
     }
-    
-    form {
-      margin-top: var(--space-4);
-    }
-    
+
     .alert {
       padding: var(--space-3);
       border-radius: 4px;
       margin-bottom: var(--space-3);
     }
-    
+
     .alert-danger {
       background-color: #ffebee;
       color: var(--error);
       border: 1px solid #ffcdd2;
     }
-    
+
     .mt-3 {
       margin-top: var(--space-3);
     }
@@ -129,7 +129,7 @@ export class LoginComponent {
   errorMessage: string = '';
   isLoading: boolean = false;
   returnUrl: string = '';
-  
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -140,24 +140,24 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
-    
+
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
   }
-  
+
   onSubmit() {
     if (this.loginForm.invalid || this.isLoading) {
       return;
     }
-    
+
     this.isLoading = true;
     this.errorMessage = '';
-    
+
     const { email, password } = this.loginForm.value;
-    
+
     this.authService.login(email, password).subscribe({
       next: (response) => {
         this.isLoading = false;
-        
+
         if (this.authService.isAdmin()) {
           this.router.navigate(['/admin/dashboard']);
         } else {
