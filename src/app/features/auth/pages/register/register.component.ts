@@ -13,18 +13,18 @@ import { AuthService } from '../../../../core/services/auth.service';
       <div class="auth-card card">
         <h2 class="text-center">Farm Equipment Rental</h2>
         <h3 class="text-center">Create an Account</h3>
-        
+
         <div *ngIf="errorMessage" class="alert alert-danger">
           {{ errorMessage }}
         </div>
-        
+
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label for="name" class="form-label">Full Name</label>
-            <input 
-              type="text" 
-              id="name" 
-              formControlName="name" 
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
               class="form-control"
               placeholder="Enter your full name"
             >
@@ -32,13 +32,13 @@ import { AuthService } from '../../../../core/services/auth.service';
               Full name is required
             </div>
           </div>
-          
+
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              formControlName="email" 
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
               class="form-control"
               placeholder="Enter your email"
             >
@@ -46,13 +46,13 @@ import { AuthService } from '../../../../core/services/auth.service';
               Please enter a valid email address
             </div>
           </div>
-          
+
           <div class="form-group">
             <label for="phone" class="form-label">Phone Number</label>
-            <input 
-              type="tel" 
-              id="phone" 
-              formControlName="phone" 
+            <input
+              type="tel"
+              id="phone"
+              formControlName="phone"
               class="form-control"
               placeholder="Enter your phone number"
             >
@@ -60,24 +60,24 @@ import { AuthService } from '../../../../core/services/auth.service';
               Please enter a valid phone number
             </div>
           </div>
-          
+
           <div class="form-group">
             <label for="address" class="form-label">Address</label>
             <textarea
-              id="address" 
-              formControlName="address" 
+              id="address"
+              formControlName="address"
               class="form-control"
               placeholder="Enter your address"
               rows="2"
             ></textarea>
           </div>
-          
+
           <div class="form-group">
             <label for="password" class="form-label">Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              formControlName="password" 
+            <input
+              type="password"
+              id="password"
+              formControlName="password"
               class="form-control"
               placeholder="Create a password"
             >
@@ -85,13 +85,13 @@ import { AuthService } from '../../../../core/services/auth.service';
               Password must be at least 6 characters
             </div>
           </div>
-          
+
           <div class="form-group">
             <label for="confirmPassword" class="form-label">Confirm Password</label>
-            <input 
-              type="password" 
-              id="confirmPassword" 
-              formControlName="confirmPassword" 
+            <input
+              type="password"
+              id="confirmPassword"
+              formControlName="confirmPassword"
               class="form-control"
               placeholder="Confirm your password"
             >
@@ -99,16 +99,16 @@ import { AuthService } from '../../../../core/services/auth.service';
               Passwords do not match
             </div>
           </div>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             class="btn btn-primary w-full"
             [disabled]="registerForm.invalid || isLoading"
           >
             {{ isLoading ? 'Creating Account...' : 'Sign Up' }}
           </button>
         </form>
-        
+
         <div class="mt-3 text-center">
           <p>Already have an account? <a routerLink="/auth/login">Login here</a></p>
         </div>
@@ -124,42 +124,41 @@ import { AuthService } from '../../../../core/services/auth.service';
       padding: var(--space-4);
       background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
     }
-    
+
     .auth-card {
-      width: 100%;
+      width: 80%;
       max-width: 500px;
-      padding: var(--space-5);
       background-color: white;
       border-radius: 8px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
-    
+
     h2 {
       color: var(--primary);
       margin-bottom: var(--space-2);
     }
-    
+
     h3 {
       margin-bottom: var(--space-4);
       color: var(--neutral-700);
     }
-    
+
     form {
       margin-top: var(--space-4);
     }
-    
+
     .alert {
       padding: var(--space-3);
       border-radius: 4px;
       margin-bottom: var(--space-3);
     }
-    
+
     .alert-danger {
       background-color: #ffebee;
       color: var(--error);
       border: 1px solid #ffcdd2;
     }
-    
+
     .mt-3 {
       margin-top: var(--space-3);
     }
@@ -169,7 +168,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
   errorMessage: string = '';
   isLoading: boolean = false;
-  
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -184,34 +183,34 @@ export class RegisterComponent {
       confirmPassword: ['', Validators.required]
     }, { validator: this.passwordMatchValidator });
   }
-  
+
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password')?.value;
     const confirmPassword = form.get('confirmPassword')?.value;
-    
+
     if (password !== confirmPassword) {
       return { passwordMismatch: true };
     }
-    
+
     return null;
   }
-  
+
   onSubmit() {
     if (this.registerForm.invalid || this.isLoading) {
       return;
     }
-    
+
     this.isLoading = true;
     this.errorMessage = '';
-    
+
     const { confirmPassword, ...userData } = this.registerForm.value;
     userData.role = 'farmer'; // Default role for sign up
-    
+
     this.authService.register(userData).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigate(['/auth/login'], { 
-          queryParams: { registered: 'success' } 
+        this.router.navigate(['/auth/login'], {
+          queryParams: { registered: 'success' }
         });
       },
       error: (error) => {
