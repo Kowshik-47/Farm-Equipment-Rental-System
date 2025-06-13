@@ -16,6 +16,7 @@ export const FARMER_ROUTES: Routes = [
       },
       {
         path: 'equipment/:id',
+        data: { renderMode: 'ssr' },
         loadComponent: () => import('./pages/equipment-detail/equipment-detail.component').then(m => m.EquipmentDetailComponent)
       },
       {
