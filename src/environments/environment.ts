@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: '/api'
+  apiUrl: 'https://agroequip-express-backend.onrender.com/api'
 };
