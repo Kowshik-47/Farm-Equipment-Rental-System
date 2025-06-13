@@ -10,5 +10,5 @@ import { HeaderComponent } from './shared/components/header/header.component';
   styleUrls: ['./app.css']
 })
 export class App {
-  protected title = 'Ang';
+  protected title = 'agro-equip';
 }
