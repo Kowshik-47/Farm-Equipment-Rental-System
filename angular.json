@@ -83,6 +83,19 @@
               "src/styles.css"
             ]
           }
+        },
+        "prerender": {
+          "builder": "@angular-devkit/build-angular:prerender",
+          "options": {
+            "browserTarget": "Ang:build:production",
+            "serverTarget": "Ang:server:production",
+            "routes": [
+              "/", 
+              "/farmer",
+              "/equipment"
+              // No dynamic routes like /farmer/equipment/:id here
+            ]
+          }
         }
       }
     }
