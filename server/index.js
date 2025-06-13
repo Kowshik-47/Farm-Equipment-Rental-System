@@ -6,7 +6,7 @@ const path = require('path');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY || 'sk_test_51J2aBcD3f9kLmNpX8zQwRtYpZsXr7HvJmPqKxN4bLcT2mF9vA3dG8hB5nQwRtYpZsXr7HvJmPqKxN4');
+const stripe = require('stripe')('sk_test_51J2aBcD3f9kLmNpX8zQwRtYpZsXr7HvJmPqKxN4bLcT2mF9vA3dG8hB5nQwRtYpZsXr7HvJmPqKxN4');
 const nodemailer = require('nodemailer');
 
 // Initialize Express app
