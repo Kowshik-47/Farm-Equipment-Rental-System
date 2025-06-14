@@ -6,32 +6,34 @@ import { EquipmentService } from '../../../../core/services/equipment.service';
 import { UserService } from '../../../../core/services/user.service';
 import { Observable } from 'rxjs';
 import { User } from '../../../../core/models/user.model';
-import { Equipment } from '../../../../core/models/equipment.model';  
+import { Equipment } from '../../../../core/models/equipment.model';
+import { ChangeDetectorRef } from '@angular/core';
+import { LoaderComponent } from '../../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoaderComponent],
   templateUrl: './dashboard.component.html',
   styles: [`
     .dashboard {
       max-width: 1200px;
       margin: 0 auto;
     }
-    
+
     .status-cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: var(--space-4);
       margin-bottom: var(--space-5);
     }
-    
+
     .status-card {
       display: flex;
       align-items: center;
       padding: var(--space-4);
     }
-    
+
     .status-icon {
       width: 60px;
       height: 60px;
@@ -42,28 +44,28 @@ import { Equipment } from '../../../../core/models/equipment.model';
       font-size: 24px;
       margin-right: var(--space-3);
     }
-    
+
     .booking-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: var(--space-4);
     }
-    
+
     .booking-card {
       padding: var(--space-3);
     }
-    
+
     .booking-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: var(--space-3);
     }
-    
+
     .booking-info p {
       margin-bottom: var(--space-2);
     }
-    
+
     .error-message {
       color: red;
       padding: var(--space-3);
@@ -78,18 +80,23 @@ export class DashboardComponent implements OnInit {
   };
   activeBookings: Booking[] = [];
   errorMessage: string | null = null;
-  popularEquipment : string | null = null;
+  popularEquipment: string | null = null;
+  isLoading: boolean = true;
 
-  constructor(private bookingService: BookingService, private userService : UserService, private equipmentService : EquipmentService) {}
+  constructor(private bookingService: BookingService,
+    private userService: UserService,
+    private changeDetectorRef: ChangeDetectorRef,
+    private equipmentService: EquipmentService
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loadStatistics();
     this.loadActiveBookings();
   }
 
-  private loadStatistics() {
-    this.bookingService.getBookingStatistics().subscribe({
-      next: (stats) => {
+  private async loadStatistics() {
+    await this.bookingService.getBookingStatistics().subscribe({
+      next: (stats: any) => {
         this.statistics = {
           totalBookings: stats.totalBookings || 0,
           revenue: stats.revenue || 0,
@@ -98,24 +105,31 @@ export class DashboardComponent implements OnInit {
           popularEquipment: stats.popularEquipment || []
         };
 
-        this.popularEquipment = this.statistics.popularEquipment[0].equipment.name
+        this.changeDetectorRef.detectChanges()
+        this.popularEquipment = this.statistics.popularEquipment[0]?.equipment.name
         this.errorMessage = null;
       },
       error: (error) => {
+        this.changeDetectorRef.detectChanges()
         console.error('Error loading statistics:', error);
         this.errorMessage = 'Failed to load statistics. Please try again later.';
       }
     });
   }
 
-  private loadActiveBookings() {
-    this.bookingService.getActiveBookings().subscribe({
+  private async loadActiveBookings() {
+    this.isLoading = true
+    await this.bookingService.getActiveBookings().subscribe({
       next: (bookings) => {
         this.activeBookings = bookings;
+        this.isLoading = false
+        this.changeDetectorRef.detectChanges()
         this.errorMessage = null;
       },
       error: (error) => {
-        console.error('Error loading active bookings:', error);
+        this.isLoading = false
+        this.changeDetectorRef.detectChanges()
+        console.error('Error loading active bookings:');
         this.errorMessage = 'Failed to load active bookings. Please try again later.';
       }
     });
