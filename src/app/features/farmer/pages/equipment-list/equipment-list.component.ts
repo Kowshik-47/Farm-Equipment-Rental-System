@@ -4,40 +4,43 @@ import { RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EquipmentService } from '../../../../core/services/equipment.service';
 import { Equipment } from '../../../../core/models/equipment.model';
+import { environment } from '../../../../../environments/environment';
+import { ChangeDetectorRef } from '@angular/core';
+import { LoaderComponent } from '../../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-equipment-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, LoaderComponent],
   templateUrl: './equipment-list.component.html',
   styles: [`
     .equipment-list-page {
       max-width: 1200px;
       margin: 0 auto;
     }
-    
+
     .filters {
       margin-bottom: var(--space-4);
     }
-    
+
     .filter-form {
       display: flex;
       flex-wrap: wrap;
       gap: var(--space-3);
       align-items: flex-end;
     }
-    
+
     .filter-section {
       flex: 1;
       min-width: 200px;
     }
-    
+
     .equipment-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: var(--space-4);
     }
-    
+
     .equipment-card {
       display: flex;
       flex-direction: column;
@@ -45,29 +48,29 @@ import { Equipment } from '../../../../core/models/equipment.model';
       overflow: hidden;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    
+
     .equipment-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
-    
+
     .equipment-image {
       position: relative;
       height: 200px;
       overflow: hidden;
     }
-    
+
     .equipment-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.3s ease;
     }
-    
+
     .equipment-card:hover .equipment-image img {
       transform: scale(1.05);
     }
-    
+
     .maintenance-badge {
       position: absolute;
       top: var(--space-2);
@@ -79,54 +82,54 @@ import { Equipment } from '../../../../core/models/equipment.model';
       font-size: 12px;
       font-weight: 500;
     }
-    
+
     .equipment-info {
       padding: var(--space-3);
       flex: 1;
     }
-    
+
     .equipment-category {
       font-size: 14px;
       color: var(--neutral-600);
       margin-bottom: var(--space-2);
     }
-    
+
     .equipment-rate {
       font-weight: 600;
       color: var(--primary);
       margin-bottom: var(--space-2);
       font-size: 18px;
     }
-    
+
     .equipment-description {
       color: var(--neutral-700);
       margin-bottom: var(--space-2);
       font-size: 14px;
       line-height: 1.5;
     }
-    
+
     .equipment-footer {
       padding: 0 var(--space-3) var(--space-3);
       display: flex;
       justify-content: center;
     }
-    
+
     .empty-state, .loading-state {
       padding: var(--space-5);
       text-align: center;
     }
-    
+
     .empty-state p, .loading-state p {
       margin-bottom: var(--space-3);
       color: var(--neutral-600);
     }
-    
+
     @media (max-width: 768px) {
       .filter-form {
         flex-direction: column;
         align-items: stretch;
       }
-      
+
       .filter-section {
         width: 100%;
       }
@@ -139,10 +142,11 @@ export class EquipmentListComponent implements OnInit {
   categories: string[] = [];
   filterForm: FormGroup;
   loading: boolean = true;
-  
+
   constructor(
     private equipmentService: EquipmentService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     this.filterForm = this.fb.group({
       search: [''],
@@ -150,50 +154,50 @@ export class EquipmentListComponent implements OnInit {
       sortBy: ['nameAsc']
     });
   }
-  
-  ngOnInit() {
+
+  async ngOnInit() {
     this.loadEquipment();
-    
+
     // Apply filters when form changes
     this.filterForm.valueChanges.subscribe(() => {
       this.applyFilters();
     });
   }
-  
-  loadEquipment() {
+
+  private async loadEquipment() {
     this.loading = true;
     this.equipmentService.getAllEquipment().subscribe(equipment => {
       this.allEquipment = equipment;
-      
       // Extract unique categories
       const categorySet = new Set<string>();
       equipment.forEach(item => categorySet.add(item.category));
       this.categories = Array.from(categorySet);
-      
+
       this.applyFilters();
       this.loading = false;
+      this.changeDetectorRef.detectChanges()
     });
   }
-  
+
   applyFilters() {
     const { search, category, sortBy } = this.filterForm.value;
-    
+
     // Filter by search term
     let filtered = this.allEquipment;
-    
+
     if (search) {
       const searchLower = search.toLowerCase();
-      filtered = filtered.filter(item => 
-        item.name.toLowerCase().includes(searchLower) || 
+      filtered = filtered.filter(item =>
+        item.name.toLowerCase().includes(searchLower) ||
         item.description.toLowerCase().includes(searchLower)
       );
     }
-    
+
     // Filter by category
     if (category) {
       filtered = filtered.filter(item => item.category === category);
     }
-    
+
     // Sort items
     switch (sortBy) {
       case 'nameAsc':
@@ -209,15 +213,19 @@ export class EquipmentListComponent implements OnInit {
         filtered.sort((a, b) => b.dailyRate - a.dailyRate);
         break;
     }
-    
+
     this.filteredEquipment = filtered;
   }
-  
+
   resetFilters() {
     this.filterForm.setValue({
       search: '',
       category: '',
       sortBy: 'nameAsc'
     });
+  }
+
+  getImageUrl(url: String[]): String {
+    return environment.baseUrl + url[0]
   }
 }
