@@ -4,24 +4,26 @@ import { BookingService } from '../../../../core/services/booking.service';
 import { Booking } from '../../../../core/models/booking.model';
 import { EquipmentService } from '../../../../core/services/equipment.service';
 import { UserService } from '../../../../core/services/user.service';
+import { ChangeDetectorRef } from '@angular/core';
+import { LoaderComponent } from '../../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-booking-management',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl :"./booking-management.component.html",
+  imports: [CommonModule, LoaderComponent],
+  templateUrl: "./booking-management.component.html",
   styles: [`
     .booking-management {
       max-width: 1200px;
       margin: 0 auto;
     }
-    
+
     .booking-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: var(--space-4);
     }
-    
+
     .booking-card {
       height: 100%;
     }
@@ -49,15 +51,15 @@ import { UserService } from '../../../../core/services/user.service';
       align-items: center;
       margin-bottom: var(--space-3);
     }
-    
+
     .booking-details p {
       margin-bottom: var(--space-2);
     }
-    
+
     .proof-image {
       margin: var(--space-3) 0;
     }
-    
+
     .proof-image img {
       max-width: 100%;
       border-radius: 4px;
@@ -78,49 +80,57 @@ import { UserService } from '../../../../core/services/user.service';
 })
 export class BookingManagementComponent implements OnInit {
   bookings: Booking[] = [];
+  isLoading: boolean = true;
 
-  constructor(private bookingService: BookingService, 
-    private equipmentService: EquipmentService, 
-    private userService : UserService) {}
+  constructor(private bookingService: BookingService,
+    private equipmentService: EquipmentService,
+    private userService: UserService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loadBookings();
   }
 
-  private loadBookings() {
+  private async loadBookings() {
+    this.isLoading = true
     this.bookingService.getAllBookings().subscribe({
       next: (bookings) => {
         this.bookings = bookings;
+        this.isLoading = false
+        this.changeDetectorRef.detectChanges()
       },
       error: (error) => {
-        console.error('Error loading bookings:', error);
+        this.isLoading = false
+        this.changeDetectorRef.detectChanges()
+        console.error('Error loading bookings:');
       }
     });
   }
 
-  accept(booking : Booking){
-    if(booking && booking.status === 'pending'){
+  async accept(booking: Booking) {
+    if (booking && booking.status === 'pending') {
       booking.status = 'In Progress'
       this.bookingService.updateBooking(booking._id.toString(), booking).subscribe(
-        (res) => {
-          console.log('In Progess')
-        },
-        (error) =>{
-          console.log(error)
+        (res) => { this.changeDetectorRef.detectChanges() },
+        (error) => {
+          this.changeDetectorRef.detectChanges()
+          console.log('Something went wrong')
         }
       )
     }
   }
 
-  deny(booking : Booking){
-    if(booking && booking.status === 'pending'){
+  async deny(booking: Booking) {
+    if (booking && (booking.status === 'pending' || booking.status === 'In Progress')) {
       booking.status = 'cancelled'
       this.bookingService.updateBooking(booking._id.toString(), booking).subscribe(
         (res) => {
-          console.log('Cancelled')
+          this.changeDetectorRef.detectChanges()
         },
-        (error) =>{
-          console.log(error)
+        (error) => {
+          this.changeDetectorRef.detectChanges()
+          console.log('Something went Wrong')
         }
       )
     }
