@@ -14,7 +14,7 @@
     <div class="img-container">
       <button id="prev" (click)="prevSlide()">
         &lt;</button>
-      <img [src]="'http://localhost:3000/public'+slides[count]" alt="image" class="image-content" id="image-content"
+      <img [src]="getImageUrl('/public'+slides[count])" alt="image" class="image-content" id="image-content"
         draggable="false" (error)="onImageError($event)">
       <h3 id="quotes">{{ quotes[count] }}</h3>
       <button id="next" (click)="nextSlide()">&gt;</button>
@@ -22,7 +22,7 @@
     <br><br>
     <div class="content-horiz">
       <div class="context">
-        <img src="http://localhost:3000/public/assets/Images/wide.jfif" (error)="onImageError($event)">
+        <img [src]="getImageUrl('/public/assets/Images/wide.jfif')" (error)="onImageError($event)">
         <div>
           <strong>Wide Range of Equipments</strong><br>
           Explore our extensive inventory of high-quality farm equipment, including tractors,
@@ -37,10 +37,10 @@
           necessary details, so you know exactly what to expect. No hidden fees just straightforward
           pricing for your peace of mind.
         </div>
-        <img src="http://localhost:3000/public/assets/Images/price.png" (error)="onImageError($event)">
+        <img [src]="getImageUrl('/public/assets/Images/price.png')" (error)="onImageError($event)">
       </div>
       <div class="context">
-        <img src="http://localhost:3000/public/assets/Images/flexible.png" (error)="onImageError($event)">
+        <img [src]="getImageUrl('/public/assets/Images/flexible.png')" (error)="onImageError($event)">
         <div>
           <strong>Flexible Rental Options</strong><br>
           Choose from a variety of rental plans tailored to your requirements. Whether you need equipment
@@ -52,24 +52,21 @@
     <br>
     <div class="count-container">
       <div class="count-card">
-        <img src="http://localhost:3000/public/assets/icons/Farmer.png" alt="Loading"
-          (error)="onImageError($event)"><br>
+        <img [src]="getImageUrl('/public/assets/icons/Farmer.png')" alt="Loading" (error)="onImageError($event)"><br>
         <div>
           <strong>57640</strong>
           <h6>Farmers</h6>
         </div>
       </div>
       <div class="count-card">
-        <img src="http://localhost:3000/public/assets/icons/Community.png" alt="Loading"
-          (error)="onImageError($event)"><br>
+        <img [src]="getImageUrl('/public/assets/icons/Community.png')" alt="Loading" (error)="onImageError($event)"><br>
         <div>
           <strong>127640</strong>
           <h6>Community <br> Members</h6>
         </div>
       </div>
       <div class="count-card">
-        <img src="http://localhost:3000/public/assets/icons/Tractor.png" alt="Loading"
-          (error)="onImageError($event)"><br>
+        <img [src]="getImageUrl('/public/assets/icons/Tractor.png')" alt="Loading" (error)="onImageError($event)"><br>
         <div>
           <strong>19760</strong>
           <h6>Equipments</h6>
@@ -101,8 +98,7 @@
     <div class="category">
       <div class="equip-type">
         <div class="images" *ngFor="let image of images" [attr.tabIndex]="image.index" [attr.title]="image.name">
-          <img [src]="'http://localhost:3000/public/'+image.link" [attr.title]="image.name"
-            (error)="onImageError($event)">
+          <img [src]="getImageUrl(image.link)" [attr.title]="image.name" (error)="onImageError($event)">
           <div>
             <strong>{{ image.name }}</strong>
             <p>{{ image.desc }}</p>
