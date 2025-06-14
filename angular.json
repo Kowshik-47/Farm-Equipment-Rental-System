@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Ang": {
+    "agro-equip": {
       "projectType": "application",
       "schematics": {},
       "root": "",
