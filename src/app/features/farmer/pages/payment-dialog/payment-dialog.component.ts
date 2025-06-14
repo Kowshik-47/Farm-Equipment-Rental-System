@@ -8,15 +8,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-payment-dialog',
   templateUrl: './payment-dialog.component.html',
   styleUrls: ['./payment-dialog.component.css'],
-  imports: [MatDialogModule,MatFormFieldModule,MatInputModule,MatIconModule,MatButtonModule,CommonModule,FormsModule]
+  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule, CommonModule, FormsModule]
 })
 export class PaymentDialogComponent {
-    processing = false;
+  processing = false;
   paymentError = '';
   cardDetails = {
     number: '',
@@ -34,12 +35,13 @@ export class PaymentDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<PaymentDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { booking: any },
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    private changeDetectorRef: ChangeDetectorRef
+  ) { }
 
   validateForm(): boolean {
     this.paymentError = '';
-    
+
     // Remove spaces before validation
     const cleanCardNumber = this.cardDetails.number.replace(/\s/g, '');
 
@@ -75,7 +77,8 @@ export class PaymentDialogComponent {
     value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
     this.cardDetails.number = value.trim(); // Trim to prevent trailing space
   }
-  processPayment(): void {
+
+  async processPayment() {
     if (!this.validateForm()) return;
 
     this.processing = true;
@@ -83,23 +86,26 @@ export class PaymentDialogComponent {
     // Simulate payment processing delay
     setTimeout(() => {
       this.processing = false;
-      
+
       // Generate fake payment ID for demo
       const fakePaymentId = `demo_pay_${Date.now()}`;
-      
+
       // Update booking locally (no API call)
       this.data.booking.paymentStatus = 'paid';
       this.data.booking.status = 'confirmed';
       this.data.booking.paymentId = fakePaymentId;
-      
-      this.snackBar.open('Payment processed successfully!', 'Close', { 
+
+      this.snackBar.open('Payment processed successfully!', 'Close', {
         duration: 3000,
         panelClass: ['success-snackbar']
       });
-      
+
+      this.changeDetectorRef.detectChanges()
       this.dialogRef.close('success');
     }, 1500);
+
   }
+
   formatExpiry(event: any): void {
     let value = event.target.value.replace(/\D/g, '');
     if (value.length > 2) {
@@ -107,4 +113,4 @@ export class PaymentDialogComponent {
     }
     this.cardDetails.expiry = value;
   }
-} 
+}
