@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -71,6 +72,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  getImageUrl(url: String): String {
+    return environment.baseUrl + url
+  }
+
   ngOnDestroy() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
@@ -102,7 +107,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     console.error('Image failed to load:', (event.target as HTMLImageElement).src);
   }
 
-  login(){
+  login() {
     this.router.navigate(['/auth/login']);
   }
 }
