@@ -2,15 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../../core/services/user.service';
 import { User } from '../../../../core/models/user.model';
+import { ChangeDetectorRef } from '@angular/core';
+import { LoaderComponent } from '../../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoaderComponent],
   template: `
     <div class="user-management fade-in">
       <h2>User Management</h2>
-      
+
       <div class="user-list">
         @for (user of users; track user._id) {
           <div class="user-card card">
@@ -20,7 +22,7 @@ import { User } from '../../../../core/models/user.model';
                 {{user.role}}
               </span>
             </div>
-            
+
             <div class="user-details">
               <p><strong>Email:</strong> {{user.email}}</p>
               @if (user.phone) {
@@ -30,7 +32,7 @@ import { User } from '../../../../core/models/user.model';
                 <p><strong>Address:</strong> {{user.address}}</p>
               }
             </div>
-            
+
             <div class="user-actions">
               @if (user.role === 'farmer') {
                 <button class="btn btn-primary" (click)="promoteToAdmin(user._id)">
@@ -48,7 +50,10 @@ import { User } from '../../../../core/models/user.model';
             </div>
           </div>
         } @empty {
-          <div class="empty-state card">
+         <div class="card" *ngIf="isLoading">
+            <app-loader></app-loader>
+          </div>
+          <div class="empty-state card" *ngIf="!isLoading">
             <p>No users found</p>
           </div>
         }
@@ -60,32 +65,32 @@ import { User } from '../../../../core/models/user.model';
       max-width: 1200px;
       margin: 0 auto;
     }
-    
+
     .user-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: var(--space-4);
     }
-    
+
     .user-card {
       height: 100%;
     }
-    
+
     .user-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: var(--space-3);
     }
-    
+
     .user-details {
       margin-bottom: var(--space-3);
     }
-    
+
     .user-details p {
       margin-bottom: var(--space-2);
     }
-    
+
     .user-actions {
       display: flex;
       gap: var(--space-2);
@@ -95,44 +100,50 @@ import { User } from '../../../../core/models/user.model';
 })
 export class UserManagementComponent implements OnInit {
   users: User[] = [];
+  isLoading: boolean = true;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private changeDetectorRef: ChangeDetectorRef) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loadUsers();
   }
 
-  private loadUsers() {
+  private async loadUsers() {
     this.userService.getAllUsers().subscribe({
       next: (users) => {
         this.users = users;
+        this.changeDetectorRef.detectChanges()
+        this.isLoading = false
       },
       error: (error) => {
-        console.error('Error loading users:', error);
+        this.changeDetectorRef.detectChanges()
+        console.error('Error loading users');
       }
     });
   }
 
-  promoteToAdmin(userId: string) {
+  async promoteToAdmin(userId: string) {
     if (confirm('Are you sure you want to promote this user to admin?')) {
       this.userService.promoteToAdmin(userId).subscribe({
         next: () => {
           this.loadUsers();
         },
         error: (error) => {
+          this.changeDetectorRef.detectChanges()
           console.error('Error promoting user:', error);
         }
       });
     }
   }
 
-  demoteToFarmer(userId: string) {
+  async demoteToFarmer(userId: string) {
     if (confirm('Are you sure you want to demote this user to farmer?')) {
       this.userService.demoteFromAdmin(userId).subscribe({
         next: () => {
           this.loadUsers();
         },
         error: (error) => {
+          this.changeDetectorRef.detectChanges()
           console.error('Error demoting user:', error);
         }
       });
