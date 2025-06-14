@@ -11,12 +11,16 @@ import { EquipmentService } from '../../../../core/services/equipment.service';
 import { jsPDF } from 'jspdf';
 import { BookingDialogComponent } from '../booking-dialog/booking-dialog.component';
 import { HttpClient } from '@angular/common/http';
+import { LoaderComponent } from '../../../../shared/components/loading/loading.component';
+import { ChangeDetectorRef } from '@angular/core';
+import { environment } from '../../../../../environments/environment';
+
 
 @Component({
   selector: 'app-booking-list',
   templateUrl: './booking-list.component.html',
   styleUrls: ['./booking-list.component.css'],
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule, RouterModule, LoaderComponent],
 })
 export class BookingListComponent implements OnInit {
   bookings: Booking[] = [];
@@ -29,40 +33,31 @@ export class BookingListComponent implements OnInit {
     private snackBar: MatSnackBar,
     private userService: UserService,
     private equipmentService: EquipmentService,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+    private changeDetectorRef: ChangeDetectorRef
+  ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.loadUserBookings();
   }
 
-  getEquipmentName(booking: Booking): any {
-    this.equipmentService.getEquipmentById(booking._id.toString()).subscribe({
-      next: (equipment) => {
-        return equipment.name.toString();
-      },
-      error: () => {
-        console.error('Error fetching equipment name');
-      }
-    }); 
-  }
-
-  loadUserBookings(): void {
+  private async loadUserBookings() {
     this.isLoading = true;
     this.bookingService.getUserBookings().subscribe(
       (bookings) => {
         this.bookings = bookings;
         this.isLoading = false;
+        this.changeDetectorRef.detectChanges()
       },
       (error) => {
-        // Fallback to cache if available
+        this.changeDetectorRef.detectChanges()
         this.errorMessage = 'Failed to load bookings';
         this.isLoading = false;
       }
     );
   }
 
-  openPaymentDialog(booking: Booking): void {
+  async openPaymentDialog(booking: Booking) {
     const dialogRef = this.dialog.open(PaymentDialogComponent, {
       width: '500px',
       data: { booking }
@@ -73,9 +68,10 @@ export class BookingListComponent implements OnInit {
         this.bookingService.processPayment(booking._id, 'Card')
           .subscribe({
             next: async (response) => {
-              this.snackBar.open(response, 'Close', { 
+              this.changeDetectorRef.detectChanges()
+              this.snackBar.open(response, 'Close', {
                 duration: 3000,
-                panelClass: ['success-snackbar'] 
+                panelClass: ['success-snackbar']
               });
               // Generate and send PDF only after successful payment
               this.generateAndDownloadPDF(booking);
@@ -85,17 +81,19 @@ export class BookingListComponent implements OnInit {
     })
   }
 
-  cancelBooking(booking: Booking): void {
+  async cancelBooking(booking: Booking) {
     if (confirm('Are you sure you want to cancel this booking?')) {
       console.log('Booking cancelled:', booking);
-      if(booking &&  this.canCancel(booking)){
+      if (booking && this.canCancel(booking)) {
         booking.status = 'cancelled'
         this.bookingService.updateBooking(booking._id.toString(), booking).subscribe(
           (res) => {
+            this.changeDetectorRef.detectChanges()
             this.snackBar.open('Booking cancelled successfully!', 'Close', { duration: 3000 })
           },
-          (error) =>{
-            console.log(error)
+          (error) => {
+            this.changeDetectorRef.detectChanges()
+            console.log('Something went wrong')
           }
         )
       }
@@ -103,14 +101,14 @@ export class BookingListComponent implements OnInit {
   }
 
   canPay(booking: Booking): boolean {
-    return booking.status === 'In Progress'  && booking.paymentStatus !== 'paid';
+    return booking.status === 'In Progress' && booking.paymentStatus !== 'paid';
   }
 
   canCancel(booking: Booking): boolean {
     return booking.status === 'pending' || booking.status === 'In Progress';
   }
 
-  private generateAndDownloadPDF(booking: Booking): void {
+  private async generateAndDownloadPDF(booking: Booking) {
     this.userService.getUserById(booking.farmer.toString()).subscribe({
       next: (user) => {
         // Generate PDF with enhanced styling
@@ -193,7 +191,7 @@ export class BookingListComponent implements OnInit {
         yPosition += 6;
         doc.text(`End Date: ${booking.endDate ? new Date(booking.endDate).toLocaleDateString() : 'N/A'}`, 15, yPosition);
         yPosition += 6;
-        doc.text(`Amount: ₹${booking.totalAmount || 0}`, 15, yPosition);
+        doc.text(`Amount: ₹ ${booking.totalAmount || 0}`, 15, yPosition);
         yPosition += 6;
         doc.text(`Equipment: ${booking.equipment?.name || 'N/A'}`, 15, yPosition);
         yPosition += 6;
@@ -214,7 +212,7 @@ export class BookingListComponent implements OnInit {
           const base64Data = reader.result as string;
 
           // Send email via server route
-          this.http.post('http://localhost:3000/api/bookings/send-email', {
+          this.http.post(`${environment.apiUrl}bookings/send-email`, {
             email: user.email || 'N/A',
             pdfData: base64Data
           }).subscribe({
@@ -227,7 +225,6 @@ export class BookingListComponent implements OnInit {
             }
           });
 
-          // Trigger download
           const url = window.URL.createObjectURL(pdfData);
           const link = document.createElement('a');
           link.href = url;
