@@ -195,7 +195,7 @@ export class RegisterComponent {
     return null;
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.registerForm.invalid || this.isLoading) {
       return;
     }
