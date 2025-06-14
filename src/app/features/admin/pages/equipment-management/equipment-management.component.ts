@@ -1,41 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EquipmentService } from '../../../../core/services/equipment.service';
 import { Equipment } from '../../../../core/models/equipment.model';
+import { LoaderComponent } from '../../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-equipment-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl : "./equipment-management.component.html",
+  imports: [CommonModule, ReactiveFormsModule, LoaderComponent],
+  templateUrl: "./equipment-management.component.html",
   styles: [`
     .equipment-management {
       max-width: 1200px;
       margin: 0 auto;
     }
-    
+
     .equipment-list {
       margin-top: var(--space-5);
     }
-    
+
     .equipment-card {
       margin-bottom: var(--space-3);
     }
-    
+
     .equipment-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: var(--space-3);
     }
-    
+
     .equipment-actions {
       display: flex;
       gap: var(--space-2);
     }
-    
+
     .equipment-details p {
       margin-bottom: var(--space-2);
     }
@@ -45,11 +46,13 @@ export class EquipmentManagementComponent implements OnInit {
   equipmentForm: FormGroup;
   equipmentList: Equipment[] = [];
   isSubmitting = false;
-    selectedFiles: File[] = [];
+  selectedFiles: File[] = [];
+  isLoading: boolean = false
 
   constructor(
     private fb: FormBuilder,
-    private equipmentService: EquipmentService
+    private equipmentService: EquipmentService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     this.equipmentForm = this.fb.group({
       name: ['', Validators.required],
@@ -59,22 +62,23 @@ export class EquipmentManagementComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+
+  async ngOnInit() {
     this.loadEquipment();
   }
 
   onFileSelect(event: any) {
     this.selectedFiles = Array.from(event.target.files);
-  }  
+  }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.equipmentForm.invalid || this.isSubmitting) {
       return;
     }
 
     this.isSubmitting = true;
     const formData = new FormData();
-    
+
     Object.keys(this.equipmentForm.value).forEach(key => {
       formData.append(key, this.equipmentForm.value[key]);
     });
@@ -82,7 +86,7 @@ export class EquipmentManagementComponent implements OnInit {
     this.selectedFiles.forEach(file => {
       formData.append('images', file);
     });
-    console.log(formData);
+
     this.equipmentService.addEquipment(formData).subscribe({
       next: () => {
         this.isSubmitting = false;
@@ -92,41 +96,49 @@ export class EquipmentManagementComponent implements OnInit {
       },
       error: (error) => {
         this.isSubmitting = false;
+        this.changeDetectorRef.detectChanges()
         console.error('Error adding equipment:', error);
       }
     });
   }
 
-  loadEquipment() {
+  private async loadEquipment() {
+    this.isLoading = true
     this.equipmentService.getAllEquipment().subscribe({
       next: (equipment) => {
         this.equipmentList = equipment;
+        this.isLoading = false
+        this.changeDetectorRef.detectChanges()
       },
       error: (error) => {
+        this.isLoading = false
         console.error('Error loading equipment:', error);
       }
     });
   }
 
-  toggleMaintenance(equipment: Equipment) {
+  async toggleMaintenance(equipment: Equipment) {
     this.equipmentService.setMaintenanceStatus(equipment._id, !equipment.isInMaintenance)
       .subscribe({
         next: () => {
+          this.changeDetectorRef.detectChanges()
           this.loadEquipment();
         },
         error: (error) => {
+          this.changeDetectorRef.detectChanges()
           console.error('Error updating maintenance status:', error);
         }
       });
   }
 
-  deleteEquipment(id: string) {
+  async deleteEquipment(id: string) {
     if (confirm('Are you sure you want to delete this equipment?')) {
       this.equipmentService.deleteEquipment(id).subscribe({
         next: () => {
           this.loadEquipment();
         },
         error: (error) => {
+          this.changeDetectorRef.detectChanges()
           console.error('Error deleting equipment:', error);
         }
       });
