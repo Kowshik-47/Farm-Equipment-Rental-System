@@ -57,7 +57,7 @@ import { AuthService } from '../../../../core/services/auth.service';
       width: 250px;
       background-color: white;
       box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-      height: 100%;
+      height: 100vh;
       transition: all 0.3s ease;
     }
     
