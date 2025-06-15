@@ -30,8 +30,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   tabs = ['Home', 'Machineries', 'Pricing', 'About'];
   activePane = 'Home';
   images = [
-    { name: 'Sower', link: '/assets/Images/Equipments/Sower.png', desc: 'No-till seeder designed for planting a variety of crops with minimal soil disturbance.', price: 1200, index: 0 },
-    { name: 'Fertilizer Sprayer', link: '/assets/Images/Equipments/FertilizerSprayer.png', desc: 'High-capacity self-propelled sprayer for efficient crop protection.', price: 1500, index: 1 },
+    { name: 'Sower', link: '/assets/Images/Equipments/sower.png', desc: 'No-till seeder designed for planting a variety of crops with minimal soil disturbance.', price: 1200, index: 0 },
+    { name: 'Fertilizer Sprayer', link: '/assets/Images/Equipments/fertilizer.png', desc: 'High-capacity self-propelled sprayer for efficient crop protection.', price: 1500, index: 1 },
     { name: 'Plougher', link: '/assets/Images/Equipments/plougher.png', desc: 'Heavy-duty plow designed for deep tillage and soil preparation.', price: 800, index: 2 },
     { name: 'Wheat Harvester', link: '/assets/Images/Equipments/wheat-harvester.png', desc: 'High-capacity combine harvester designed for efficient Wheat harvesting.', price: 3000, index: 3 },
     { name: 'Bale Lifter', link: '/assets/Images/Equipments/bale-lifter.png', desc: 'Equipment to lift and load bales efficiently and easily.', price: 2000, index: 4 },
