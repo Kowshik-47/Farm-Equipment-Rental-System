@@ -98,7 +98,7 @@
     <div class="category">
       <div class="equip-type">
         <div class="images" *ngFor="let image of images" [attr.tabIndex]="image.index" [attr.title]="image.name">
-          <img [src]="getImageUrl('\public' + image.link)" [attr.title]="image.name" (error)="onImageError($event)">
+          <img [src]="getImageUrl('/public' + image.link)" [attr.title]="image.name" (error)="onImageError($event)">
           <div>
             <strong>{{ image.name }}</strong>
             <p>{{ image.desc }}</p>
