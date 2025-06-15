@@ -655,6 +655,17 @@ app.get('/api/bookings', authenticate, async (req, res) => {
       }
     );
 
+    await Booking.updateMany(
+      {
+        endDate: { $lt: today },
+        paymentStatus : { $in: ['pending']},
+        status: { $ne: 'completed' } // Optional: avoid updating already completed bookings
+      },
+      {
+        $set: { status: 'cancelled' }
+      }
+    );
+    
     const bookings = await Booking.find(query)
       .populate('equipment')
       .populate('farmer', '-password')
