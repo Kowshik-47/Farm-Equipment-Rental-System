@@ -7,11 +7,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BookingDialogComponent } from '../booking-dialog/booking-dialog.component';
 import { LoaderComponent } from '../../../../shared/components/loading/loading.component';
 import { ChangeDetectorRef } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, RouterLink, RouterLinkActive],
   templateUrl: './dashboard.component.html',
   styles: [`
     .dashboard {
