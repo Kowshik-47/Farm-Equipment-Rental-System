@@ -219,14 +219,14 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'your_email@gmail.com', // Use environment variable
-        pass: 'Your App Password' // Use environment variable
+        user: 'no.reply.agroequip@gmail.com', // Use environment variable
+        pass: 'ebfadrcvsahkohbg' // Use environment variable
       }
     });
 
     // Email options
     const mailOptions = {
-      from: 'agroequip@gmail.com',
+      from: 'no.reply.agroequip@gmail.com',
       to: email,
       subject: 'AgroEquip Password Reset Passcode',
       text: `Your passcode for password reset is: ${passcode}. It is valid for 15 minutes.`
@@ -597,14 +597,14 @@ app.post('/api/bookings/send-email', async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'agroequip@gmail.com', // Use environment variable
-      pass: 'App Passcode'  // Use environment variable
+      user: 'no.reply.agroequip@gmail.com', // Use environment variable
+      pass: 'ebfadrcvsahkohbg'  // Use environment variable
     }
   });
 
   // Email options
   const mailOptions = {
-    from: 'agroequip@gmail.com',
+    from: 'no.reply.agroequip@gmail.com',
     to: email,
     subject: 'Booking Confirmation',
     text: 'Please find your booking confirmation attached.',
@@ -647,6 +647,7 @@ app.get('/api/bookings', authenticate, async (req, res) => {
     await Booking.updateMany(
       {
         endDate: { $lt: today },
+        paymentStatus : { $in: ['paid']},
         status: { $ne: 'completed' } // Optional: avoid updating already completed bookings
       },
       {
