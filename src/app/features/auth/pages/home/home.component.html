@@ -98,7 +98,7 @@
     <div class="category">
       <div class="equip-type">
         <div class="images" *ngFor="let image of images" [attr.tabIndex]="image.index" [attr.title]="image.name">
-          <img [src]="getImageUrl(image.link)" [attr.title]="image.name" (error)="onImageError($event)">
+          <img [src]="getImageUrl('\public' + image.link)" [attr.title]="image.name" (error)="onImageError($event)">
           <div>
             <strong>{{ image.name }}</strong>
             <p>{{ image.desc }}</p>
@@ -113,10 +113,8 @@
   <div class="container About" [class.active-pane]="activePane === 'About'">
     <br><br>
     <div class="about">
-      <iframe *ngIf="isBrowser"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3934.8092913426376!2d77.85086187483937!3d9.525292190557211!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b06d3287794055d%3A0x9c7b889bf154fb86!2sMepco%20Schlenk%20Engineering%20College!5e0!3m2!1sen!2sin!4v1742055850888!5m2!1sen!2sin"
-        width="450" height="350" style="border:0;" allowfullscreen="" loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125766.13088538623!2d78.04024858390216!3d9.917995862529565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c582b1189633%3A0xdc955b7264f63933!2sMadurai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1749998964596!5m2!1sen!2sin"
+        width="450" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       <div class="address">
         <h3>Contact Us</h3>
         <p>Phone No. : +91 95238275312 <br> 789 Park Avenue <br> Mumbai <br> India <br>342113</p>
