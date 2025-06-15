@@ -212,10 +212,7 @@ export class BookingListComponent implements OnInit {
           const base64Data = reader.result as string;
 
           // Send email via server route
-          this.bookingService.sendBookingEmail(
-            email: user.email || 'N/A',
-            pdfData: base64Data
-          ).subscribe({
+          this.bookingService.sendBookingEmail(user.email || 'N/A', base64Data).subscribe({
             next: () => {
               this.snackBar.open('Email sent successfully', 'Close', { duration: 3000 });
             },
