@@ -31,7 +31,7 @@
     <div class="card status-card">
       <div class="status-icon action">🚜</div>
       <div class="status-content">
-        <a href="/farmer/equipment" class="btn btn-primary">Rent Equipment</a>
+        <a routerLink="/farmer/equipment" class="btn btn-primary">Rent Equipment</a>
       </div>
     </div>
   </div>
@@ -39,12 +39,12 @@
   <div class="recent-section">
     <div class="section-header">
       <h3>Current Rentals</h3>
-      <a href="/farmer/bookings" class="view-all">View All</a>
+      <a routerLink="/farmer/bookings" class="view-all">View All</a>
     </div>
 
     <div *ngIf="activeBookings.length === 0" class="empty-state card">
       <p>You don't have any active rentals at the moment.</p>
-      <a href="/farmer/equipment" class="btn btn-outline">Browse Equipment</a>
+      <a routerLink="/farmer/equipment" class="btn btn-outline">Browse Equipment</a>
     </div>
 
     <div *ngIf="activeBookings.length > 0" class="booking-list">
