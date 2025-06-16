@@ -271,7 +271,6 @@ export class DashboardComponent implements OnInit {
     this.isLoading = true
     this.bookingService.getUserBookings().subscribe(bookings => {
       this.isLoading = false
-      this.changeDetectorRef.detectChanges()
       bookings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
       this.activeBookings = bookings.filter(booking =>
@@ -287,6 +286,7 @@ export class DashboardComponent implements OnInit {
       );
 
       this.recentBookings = bookings.slice(0, 5);
+      this.changeDetectorRef.detectChanges()
     });
   }
 
@@ -297,6 +297,7 @@ export class DashboardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'success') {
+        this.changeDetectorRef.detectChanges()
         this.loadUserBookings();
       }
     });
