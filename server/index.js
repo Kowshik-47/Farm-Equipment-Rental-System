@@ -379,6 +379,7 @@ app.put('/api/users/:id', authenticate, isAdmin, async (req, res) => {
 app.delete('/api/users/:id', authenticate, isAdmin, async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
+    await Booking.findByIdAndDelete(req.params.id);
     
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -517,6 +518,7 @@ app.put('/api/equipment/:id', authenticate, isAdmin, upload.array('images', 5), 
 app.delete('/api/equipment/:id', authenticate, isAdmin, async (req, res) => {
   try {
     const equipment = await Equipment.findByIdAndDelete(req.params.id);
+    await Booking.findByIdAndDelete(req.params.id);
     
     if (!equipment) {
       return res.status(404).json({ message: 'Equipment not found' });
