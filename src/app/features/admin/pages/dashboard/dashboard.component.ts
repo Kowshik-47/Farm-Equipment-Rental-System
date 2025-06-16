@@ -105,8 +105,8 @@ export class DashboardComponent implements OnInit {
           popularEquipment: stats.popularEquipment || []
         };
 
-        this.changeDetectorRef.detectChanges()
         this.popularEquipment = this.statistics.popularEquipment[0]?.equipment.name
+        this.changeDetectorRef.detectChanges()
         this.errorMessage = null;
       },
       error: (error) => {
