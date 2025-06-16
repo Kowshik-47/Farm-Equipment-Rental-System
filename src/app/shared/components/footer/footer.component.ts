@@ -18,9 +18,9 @@ import { Component } from '@angular/core';
         </div>
         <div class="footer-text"> 
           Designed and Developed By Kowshik B (
-          <a href="mailto:kowshikbabu7@gmail.com">kowshikbabu7@gmail.com</a>
+          <a href="mailto:kowshikbabu7@gmail.com">kowshikbabu7&#64;gmail.com</a>
           ) and Yashwanth Kumar M (
-          <a href="mailto:myashwanthkumar@gmail.com">myashwanthkumar@gmail.com</a>
+          <a href="mailto:myashwanthkumar@gmail.com">myashwanthkumar&#64;gmail.com</a>
            )
         </div>
       </div>
