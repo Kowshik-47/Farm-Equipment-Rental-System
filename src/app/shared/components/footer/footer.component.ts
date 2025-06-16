@@ -16,6 +16,7 @@ import { Component } from '@angular/core';
         <div class="footer-text">
           &copy; {{ currentYear }} Farm Equipment Rental System. All rights reserved.
         </div>
+        <div class="footer-text"> Designed and Developed By Kowshik B and Yashwanth Kumar M </div>
       </div>
     </footer>
   `,
