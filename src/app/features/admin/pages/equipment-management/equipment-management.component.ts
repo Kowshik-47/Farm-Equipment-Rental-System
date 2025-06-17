@@ -39,6 +39,7 @@ import { LoaderComponent } from '../../../../shared/components/loading/loading.c
 
     .equipment-details p {
       margin-bottom: var(--space-2);
+      font-size: 1em;
     }
   `]
 })
