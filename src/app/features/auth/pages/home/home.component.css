@@ -249,7 +249,7 @@ hr {
   float: right;
   vertical-align: top;
   border-radius: 7px;
-  background-color: rgb(3, 133, 255);
+  background-color: var(--primary);
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -268,12 +268,12 @@ hr {
 
 .btns button:hover {
   background-color: #504f4f;
-  color: rgb(3, 111, 253);
+  color: var(--primary);
 }
 
 .btns .tab-btn-active {
   background-color: #504f4f;
-  color: rgb(3, 111, 253);
+  color: var(--primary);
 }
 
 marquee,
@@ -288,7 +288,7 @@ hr {
   margin-bottom: 1%;
   margin-left: 2%;
   min-height: 20px;
-  background-color: rgb(2, 133, 255);
+  background-color: var(--primary);
   border-radius: 5px;
   display: flex;
   align-self: center;
