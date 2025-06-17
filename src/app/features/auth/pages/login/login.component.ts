@@ -67,7 +67,7 @@ import { AuthService } from '../../../../core/services/auth.service';
   styles: [`
     .auth-container {
       display: flex;
-      min-height: 75vh;
+      min-height: 95vh;
       align-items: center;
       justify-content: center;
       padding: var(--space-4);
