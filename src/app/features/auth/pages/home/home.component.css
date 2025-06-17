@@ -257,7 +257,7 @@ hr {
 
 .btns button {
   color: #e8e5e5;
-  background-color: rgb(3, 133, 255);
+  background-color: var(--primary);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 1.1em;
   border-radius: 5px;
