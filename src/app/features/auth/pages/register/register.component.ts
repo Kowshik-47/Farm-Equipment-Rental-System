@@ -120,7 +120,7 @@ import { AuthService } from '../../../../core/services/auth.service';
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 85vh;
+      height: 95vh;
       padding: var(--space-4);
       background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
     }
