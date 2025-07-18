@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const env = require('env')
+const {MONGODB_URI} = require('./env.js')
 const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
