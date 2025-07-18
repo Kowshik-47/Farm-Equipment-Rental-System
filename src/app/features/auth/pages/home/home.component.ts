@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
-import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -73,7 +72,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getImageUrl(url: String): String {
-    return environment.baseUrl + url
+    return process.env.baseUrl + url
   }
 
   ngOnDestroy() {
