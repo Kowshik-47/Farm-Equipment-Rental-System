@@ -4,7 +4,6 @@ import { RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EquipmentService } from '../../../../core/services/equipment.service';
 import { Equipment } from '../../../../core/models/equipment.model';
-import { environment } from '../../../../../environments/environment';
 import { ChangeDetectorRef } from '@angular/core';
 import { LoaderComponent } from '../../../../shared/components/loading/loading.component';
 
@@ -226,6 +225,6 @@ export class EquipmentListComponent implements OnInit {
   }
 
   getImageUrl(url: String[]): String {
-    return environment.baseUrl + url[0]
+    return process.env.baseUrl + url[0]
   }
 }
