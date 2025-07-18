@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const {MONGODB_URI} = require('./env.js')
 const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
@@ -24,7 +23,7 @@ app.use('/uploads', express.static('uploads'));
 app.use('/public', express.static('public'));
 
 // Connect to MongoDB
-mongoose.connect(MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
