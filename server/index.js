@@ -13,7 +13,6 @@ const nodemailer = require('nodemailer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const passCodes = {};
-const JWT_SECRET = 'gv5b7879vbvb59vbbu9vogub5u49cf';
 const resetPasscodeExpiry = {};
 
 // Middleware
@@ -95,7 +94,7 @@ const authenticate = async (req, res, next) => {
     }
     
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     const user = await User.findById(decoded.userId);
     if (!user) {
@@ -169,7 +168,7 @@ app.post('/api/auth/login', async (req, res) => {
     // Create and sign JWT
     const token = jwt.sign(
       { userId: user._id },
-      JWT_SECRET,
+      process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
     
