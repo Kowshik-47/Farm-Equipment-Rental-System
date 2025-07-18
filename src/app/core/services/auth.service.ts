@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { User } from '../models/user.model';
-import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -32,11 +31,11 @@ export class AuthService {
   }
 
   register(userData: any): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/auth/register`, userData);
+    return this.http.post<any>(`${process.env.apiUrl}/auth/register`, userData);
   }
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/auth/login`, { email, password })
+    return this.http.post<any>(`${process.env.apiUrl}/auth/login`, { email, password })
       .pipe(
         tap(response => {
           if (response && response.token && isPlatformBrowser(this.platformId)) {
@@ -75,7 +74,7 @@ export class AuthService {
   }
 
   updateUserProfile(userData: Partial<User>): Observable<User> {
-    return this.http.put<User>(`${environment.apiUrl}/users/profile`, userData)
+    return this.http.put<User>(`${process.env.apiUrl}/users/profile`, userData)
       .pipe(
         tap(updatedUser => {
           const currentUser = this.currentUserSubject.value;
@@ -89,14 +88,14 @@ export class AuthService {
   }
 
   requestPasscode(email: string): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/auth/forgot-password`, { email });
+    return this.http.post(`${process.env.apiUrl}/auth/forgot-password`, { email });
   }
 
   verifyPasscode(email: string, passcode: string): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/auth/verify-passcode`, { email, passcode });
+    return this.http.post(`${process.env.apiUrl}/auth/verify-passcode`, { email, passcode });
   }
 
   resetPassword(email: string, newPassword: string): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/auth/reset-password`, { email, newPassword });
+    return this.http.post(`${process.env.apiUrl}/auth/reset-password`, { email, newPassword });
   }
 }
