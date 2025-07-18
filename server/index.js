@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const env = require('env')
 const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
@@ -23,7 +24,7 @@ app.use('/uploads', express.static('uploads'));
 app.use('/public', express.static('public'));
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://kowshik-47:Ksefor-47@cluster0.1dh9lqe.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect(env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
