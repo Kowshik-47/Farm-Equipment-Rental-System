@@ -13,8 +13,6 @@ import { BookingDialogComponent } from '../booking-dialog/booking-dialog.compone
 import { HttpClient } from '@angular/common/http';
 import { LoaderComponent } from '../../../../shared/components/loading/loading.component';
 import { ChangeDetectorRef } from '@angular/core';
-import { environment } from '../../../../../environments/environment';
-
 
 @Component({
   selector: 'app-booking-list',
