@@ -24,7 +24,7 @@ app.use('/uploads', express.static('uploads'));
 app.use('/public', express.static('public'));
 
 // Connect to MongoDB
-mongoose.connect(env.MONGODB_URI)
+mongoose.connect(MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
