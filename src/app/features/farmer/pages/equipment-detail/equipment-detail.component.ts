@@ -8,7 +8,6 @@ import { Equipment } from '../../../../core/models/equipment.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ChangeDetectorRef } from '@angular/core';
 import { LoaderComponent } from '../../../../shared/components/loading/loading.component';
-import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-equipment-detail',
@@ -362,12 +361,11 @@ export class EquipmentDetailComponent implements OnInit {
           duration: 4000,
           panelClass: ['error-snackbar']
         });
-        // Handle error (show notification, etc.)
       }
     });
   }
 
   getImageUrl(url: String[]): String {
-    return environment.baseUrl + url[0]
+    return process.env.baseUrl + url[0]
   }
 }
